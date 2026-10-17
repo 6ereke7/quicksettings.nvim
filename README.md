@@ -62,8 +62,7 @@ Then run `:Lazy sync` (or your normal lazy.nvim installation command). lazy.nvim
 installs both Quick Settings and its NUI dependency; no manual cloning or
 separate NUI setup is needed.
 
-Replace `YOUR_GITHUB_USERNAME` with the repository owner. The `config` callback
-loads Quick Settings during startup and maps `<C-k>` to
+The `config` callback loads Quick Settings during startup and maps `<C-k>` to
 open its menu. If `<C-k>` is already mapped in your configuration, replace that
 mapping with the one above or choose another key. For other plugin managers,
 declare `MunifTanjim/nui.nvim` as a dependency and call
