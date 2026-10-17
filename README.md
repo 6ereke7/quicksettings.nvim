@@ -34,15 +34,6 @@ Catppuccin, or lazy.nvim as Lua modules. The default menu includes controls for
 cycling Catppuccin theme flavours and running lazy.nvim's `:Lazy` commands;
 those controls are optional and do not make those plugins dependencies.
 
-### About the Git entry
-
-Quick Settings itself does not add a Git section or depend on Gitsigns. In the
-configuration where this module was developed, a separate `git.lua` plugin
-configuration registers a `gitsigns.current_line_blame` setting through the
-public API. Any plugin can register entries in the same way. If Gitsigns is not
-installed or that registration is omitted, Quick Settings has no Git setting
-to display.
-
 ## Installation
 
 Add Quick Settings to your plugin manager. With
