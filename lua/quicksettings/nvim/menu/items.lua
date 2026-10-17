@@ -1,4 +1,4 @@
-local input = require("plugins.quicksettings.menu.input")
+local input = require("quicksettings.nvim.menu.input")
 
 local M = {}
 

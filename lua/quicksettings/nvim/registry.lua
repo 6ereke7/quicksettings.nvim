@@ -1,4 +1,4 @@
-local validation = require("plugins.quicksettings.validation")
+local validation = require("quicksettings.nvim.validation")
 
 local M = {}
 local entries = {}

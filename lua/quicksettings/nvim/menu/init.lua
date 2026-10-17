@@ -1,4 +1,4 @@
-local Items = require("plugins.quicksettings.menu.items")
+local Items = require("quicksettings.nvim.menu.items")
 
 local M = {}
 

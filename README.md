@@ -48,7 +48,7 @@ return {
   },
   lazy = false,
   config = function()
-    local quicksettings = require("quicksettings")
+    local quicksettings = require("quicksettings.nvim")
     quicksettings.load()
 
     vim.keymap.set("n", "<C-k>", quicksettings.open, {
@@ -66,7 +66,7 @@ The `config` callback loads Quick Settings during startup and maps `<C-k>` to
 open its menu. If `<C-k>` is already mapped in your configuration, replace that
 mapping with the one above or choose another key. For other plugin managers,
 declare `MunifTanjim/nui.nvim` as a dependency and call
-`require("quicksettings").load()` during startup.
+`require("quicksettings.nvim").load()` during startup.
 
 ## Usage
 
@@ -89,7 +89,7 @@ not lose their settings.
 
 ## Plugin API
 
-Require the public module as `quicksettings`. Call `load()` once during
+Require the public module as `quicksettings.nvim`. Call `load()` once during
 startup before registering plugin entries.
 
 ### Boolean setting
@@ -98,7 +98,7 @@ Boolean settings toggle with `<CR>`. `apply(value)` is called when the setting
 registers and whenever its value changes.
 
 ```lua
-local quicksettings = require("quicksettings")
+local quicksettings = require("quicksettings.nvim")
 
 quicksettings.register_setting({
   id = "gitsigns.current_line_blame",

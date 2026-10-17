@@ -1,5 +1,5 @@
-local registry = require("plugins.quicksettings.registry")
-local state = require("plugins.quicksettings.state").new(registry)
+local registry = require("quicksettings.nvim.registry")
+local state = require("quicksettings.nvim.state").new(registry)
 
 registry.set_setting_handler(state.register_plugin_setting)
 registry.set_load_check(state.is_loaded)
@@ -19,7 +19,7 @@ local M = {
 }
 
 function M.open()
-  require("plugins.quicksettings.menu").open(M)
+  require("quicksettings.nvim.menu").open(M)
 end
 
 return M

@@ -1,6 +1,6 @@
-local builtins = require("plugins.quicksettings.builtins")
-local persistence = require("plugins.quicksettings.persistence")
-local validation = require("plugins.quicksettings.validation")
+local builtins = require("quicksettings.nvim.builtins")
+local persistence = require("quicksettings.nvim.persistence")
+local validation = require("quicksettings.nvim.validation")
 
 local M = {}
 
