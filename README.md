@@ -29,11 +29,10 @@ and restored on the next startup.
 - [NUI](https://github.com/MunifTanjim/nui.nvim), the only required plugin
   dependency.
 
-Quick Settings does not import or require Gitsigns, a Git executable, Catppuccin,
-or lazy.nvim as Lua modules. The default menu includes integrations for
-Catppuccin theme flavours and lazy.nvim's `:Lazy` commands; those specific
-controls are useful when the corresponding theme or command is already
-installed, but are not needed for the settings menu or the registration API.
+Quick Settings does not import or require Gitsigns, a Git executable,
+Catppuccin, or lazy.nvim as Lua modules. The default menu includes controls for
+cycling Catppuccin theme flavours and running lazy.nvim's `:Lazy` commands;
+those controls are optional and do not make those plugins dependencies.
 
 ### About the Git entry
 
@@ -46,58 +45,52 @@ to display.
 
 ## Installation
 
-This source layout is intended to live at
-`lua/plugins/quicksettings/` in a Neovim configuration. Clone the repository
-there, replacing `YOUR_GITHUB_USERNAME` with the GitHub repository owner:
-
-```sh
-git clone https://github.com/YOUR_GITHUB_USERNAME/quicksettings.nvim.git \
-  ~/.config/nvim/lua/plugins/quicksettings
-```
-
-Install NUI with your plugin manager. For lazy.nvim, add a plugin spec such as:
+Add Quick Settings to your plugin manager. With
+[lazy.nvim](https://github.com/folke/lazy.nvim), add a spec such as
+`lua/plugins/quicksettings.lua`:
 
 ```lua
--- lua/plugins/nui.lua
 return {
-  "MunifTanjim/nui.nvim",
+  "6ereke7/quicksettings.nvim",
+  dependencies = {
+    "MunifTanjim/nui.nvim",
+  },
+  lazy = false,
+  config = function()
+    local quicksettings = require("quicksettings")
+    quicksettings.load()
+
+    vim.keymap.set("n", "<C-k>", quicksettings.open, {
+      desc = "Quick settings",
+    })
+  end,
 }
 ```
 
-Load Quick Settings during startup, before plugin configurations register
-settings:
+Then run `:Lazy sync` (or your normal lazy.nvim installation command). lazy.nvim
+installs both Quick Settings and its NUI dependency; no manual cloning or
+separate NUI setup is needed.
 
-```lua
-local quicksettings = require("plugins.quicksettings")
-quicksettings.load()
-```
-
-The menu can be opened from a keymap such as:
-
-```lua
-vim.keymap.set("n", "<C-k>", function()
-  require("plugins.quicksettings").open()
-end, { desc = "Quick settings" })
-```
-
-If your configuration uses a custom lazy.nvim spec loader, keep the local
-`quicksettings/` source directory out of plugin-spec discovery; it is a Lua
-module directory, not a lazy.nvim spec. The NUI plugin spec should still be
-loaded normally.
+Replace `YOUR_GITHUB_USERNAME` with the repository owner. The `config` callback
+loads Quick Settings during startup and maps `<C-k>` to
+open its menu. If `<C-k>` is already mapped in your configuration, replace that
+mapping with the one above or choose another key. For other plugin managers,
+declare `MunifTanjim/nui.nvim` as a dependency and call
+`require("quicksettings").load()` during startup.
 
 ## Usage
 
 Open the menu with your configured keymap. Built-in settings and registered
 plugin entries are grouped in the menu.
 
-| Key | Action |
-| --- | --- |
-| `<CR>` | Toggle, cycle, edit, or run the selected entry |
-| `j` / `<Down>` | Move to the next entry |
-| `k` / `<Up>` | Move to the previous entry |
-| `r` | Reset the selected setting to its default |
-| `R` | Reset built-in and registered plugin settings |
-| `<Esc>` / `<C-k>` | Close the menu |
+| Key               | Action                                         |
+| ----------------- | ---------------------------------------------- |
+| `<CR>`            | Toggle, cycle, edit, or run the selected entry |
+| `j` / `<Down>`    | Move to the next entry                         |
+| `k` / `<Up>`      | Move to the previous entry                     |
+| `r`               | Reset the selected setting to its default      |
+| `R`               | Reset built-in and registered plugin settings  |
+| `<Esc>` / `<C-k>` | Close the menu                                 |
 
 Changes are saved in `quicksettings.json` in Neovim's configuration directory.
 Values for registered plugin settings are restored when that plugin registers
@@ -106,7 +99,7 @@ not lose their settings.
 
 ## Plugin API
 
-Require the public module as `plugins.quicksettings`. Call `load()` once during
+Require the public module as `quicksettings`. Call `load()` once during
 startup before registering plugin entries.
 
 ### Boolean setting
@@ -115,7 +108,7 @@ Boolean settings toggle with `<CR>`. `apply(value)` is called when the setting
 registers and whenever its value changes.
 
 ```lua
-local quicksettings = require("plugins.quicksettings")
+local quicksettings = require("quicksettings")
 
 quicksettings.register_setting({
   id = "gitsigns.current_line_blame",
@@ -220,21 +213,3 @@ An `apply(value)` callback can reject an update by returning `false` or raising
 an error. Quick Settings restores the previous value and attempts to apply it
 again. If saving fails, the runtime value is also rolled back. A failed rollback
 is reported with a Neovim notification.
-
-## Development and tests
-
-Run the headless UI, validation, persistence, and rollback tests from the
-repository root:
-
-```sh
-sh tests/run-quicksettings.sh
-```
-
-The test runner opens the real NUI menu, inspects its rendered buffers and
-window bounds, feeds menu keypresses, stubs `vim.ui.input`, and starts a second
-Neovim process to verify JSON restoration. NUI must already be installed. Set
-`NUI_PATH` if it is not in the default Lazy path:
-
-```sh
-NUI_PATH=/path/to/nui.nvim sh tests/run-quicksettings.sh
-```
